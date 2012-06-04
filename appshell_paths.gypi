@@ -80,6 +80,7 @@
       '<@(autogen_client_side)',
     ],
     'appshell_sources_common': [
+      'appshell/config.h',
       'appshell/cefclient.cpp',
       'appshell/cefclient.h',
       'appshell/client_app.cpp',

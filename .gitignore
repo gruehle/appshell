@@ -1,0 +1,10 @@
+# Start by ignoring all
+*
+# Add appshell source
+!appshell/*
+# Add gyp/gypi
+!appshell.gyp
+!appshell_paths.gypi
+# Add .gitignore
+!.gitignore
+# That's all!

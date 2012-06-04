@@ -5,6 +5,7 @@
 {
   'variables': {
     'appname': 'Brackets',
+    'mac_sdk': '10.6',
     'chromium_code': 1,
     'conditions': [
       [ 'OS=="mac"', {

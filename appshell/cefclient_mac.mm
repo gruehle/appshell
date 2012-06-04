@@ -3,6 +3,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #import <Cocoa/Cocoa.h>
 #include <sstream>
 #include "cefclient/cefclient.h"
@@ -19,8 +20,6 @@
 extern CefRefPtr<ClientHandler> g_handler;
 
 char szWorkingDir[512];   // The current working directory
-
-// #define SHOW_TOOLBAR_UI
 
 #ifdef SHOW_TOOLBAR_UI
 // Sizes for URL bar layout
