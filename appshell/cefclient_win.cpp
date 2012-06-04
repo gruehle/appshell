@@ -2,6 +2,7 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
+#include "config.h"
 #include "cefclient/cefclient.h"
 #include <windows.h>
 #include <commdlg.h>
@@ -13,17 +14,18 @@
 #include "include/cef_browser.h"
 #include "include/cef_frame.h"
 #include "include/cef_runnable.h"
-#include "cefclient/binding_test.h"
 #include "cefclient/client_handler.h"
-#include "cefclient/dom_test.h"
 #include "cefclient/resource.h"
-#include "cefclient/scheme_test.h"
 #include "cefclient/string_util.h"
 
+
 #define MAX_LOADSTRING 100
+
+#ifdef SHOW_TOOLBAR_UI
 #define MAX_URL_LENGTH  255
 #define BUTTON_WIDTH 72
 #define URLBAR_HEIGHT  24
+#endif // SHOW_TOOLBAR_UI
 
 // Global Variables:
 HINSTANCE hInst;   // current instance
@@ -76,9 +78,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
   // Initialize CEF.
   CefInitialize(main_args, settings, app.get());
-
-  // Register the scheme handler.
-  scheme_test::InitTest();
 
   HACCEL hAccelTable;
 
@@ -202,6 +201,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
   PAINTSTRUCT ps;
   HDC hdc;
 
+#ifdef SHOW_TOOLBAR_UI
   if (hWnd == editWnd) {
     // Callback for the edit window
     switch (message) {
@@ -220,10 +220,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         return 0;
       }
     }
-
     return (LRESULT)CallWindowProc(editWndOldProc, hWnd, message, wParam,
                                    lParam);
-  } else {
+  } else
+#endif // SHOW_TOOLBAR_UI
+  {
     // Callback for the main window
     switch (message) {
     case WM_CREATE: {
@@ -237,6 +238,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
       GetClientRect(hWnd, &rect);
 
+#ifdef SHOW_TOOLBAR_UI
       backWnd = CreateWindow(L"BUTTON", L"Back",
                               WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON
                               | WS_DISABLED, x, 0, BUTTON_WIDTH, URLBAR_HEIGHT,
@@ -279,6 +281,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
       g_handler->SetButtonHwnds(backWnd, forwardWnd, reloadWnd, stopWnd);
 
       rect.top += URLBAR_HEIGHT;
+#endif // SHOW_TOOLBAR_UI
 
       CefWindowInfo info;
       CefBrowserSettings settings;
@@ -338,6 +341,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
               MB_OK | MB_ICONINFORMATION);
         }
         return 0;
+#ifdef SHOW_TOOLBAR_UI
       case IDC_NAV_BACK:   // Back button
         if (browser.get())
           browser->GoBack();
@@ -354,74 +358,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
         if (browser.get())
           browser->StopLoad();
         return 0;
-      case ID_TESTS_GETSOURCE:  // Test the GetSource function
-        if (browser.get())
-          RunGetSourceTest(browser);
-        return 0;
-      case ID_TESTS_GETTEXT:  // Test the GetText function
-        if (browser.get())
-          RunGetTextTest(browser);
-        return 0;
-      case ID_TESTS_POPUP:  // Test a popup window
-        if (browser.get())
-          RunPopupTest(browser);
-        return 0;
-      case ID_TESTS_REQUEST:  // Test a request
-        if (browser.get())
-          RunRequestTest(browser);
-        return 0;
-      case ID_TESTS_SCHEME_HANDLER:  // Test the scheme handler
-        if (browser.get())
-          scheme_test::RunTest(browser);
-        return 0;
-      case ID_TESTS_BINDING:  // Test JavaScript binding
-        if (browser.get())
-          binding_test::RunTest(browser);
-        return 0;
-      case ID_TESTS_DIALOGS:  // Test JavaScript dialogs
-        if (browser.get())
-          RunDialogTest(browser);
-        return 0;
-      case ID_TESTS_PLUGIN_INFO:  // Test plugin info
-        if (browser.get())
-          RunPluginInfoTest(browser);
-        return 0;
-      case ID_TESTS_DOM_ACCESS:  // Test DOM access
-        if (browser.get())
-          dom_test::RunTest(browser);
-        return 0;
-      case ID_TESTS_LOCALSTORAGE:  // Test localStorage
-        if (browser.get())
-          RunLocalStorageTest(browser);
-        return 0;
-      case ID_TESTS_ACCELERATED2DCANVAS:  // Test accelerated 2d canvas
-        if (browser.get())
-          RunAccelerated2DCanvasTest(browser);
-        return 0;
-      case ID_TESTS_ACCELERATEDLAYERS:  // Test accelerated layers
-        if (browser.get())
-          RunAcceleratedLayersTest(browser);
-        return 0;
-      case ID_TESTS_WEBGL:  // Test WebGL
-        if (browser.get())
-          RunWebGLTest(browser);
-        return 0;
-      case ID_TESTS_HTML5VIDEO:  // Test HTML5 video
-        if (browser.get())
-          RunHTML5VideoTest(browser);
-        return 0;
-      case ID_TESTS_XMLHTTPREQUEST:  // Test XMLHttpRequest
-        if (browser.get())
-          RunXMLHTTPRequestTest(browser);
-        return 0;
-      case ID_TESTS_DRAGDROP:  // Test drag & drop
-        if (browser.get())
-          RunDragDropTest(browser);
-        return 0;
-      case ID_TESTS_GEOLOCATION:  // Test geolocation
-        if (browser.get())
-          RunGeolocationTest(browser);
-        return 0;
+#endif // SHOW_TOOLBAR_UI
       }
       break;
     }
@@ -453,13 +390,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
           // window size
           RECT rect;
           GetClientRect(hWnd, &rect);
+#ifdef SHOW_TOOLBAR_UI
           rect.top += URLBAR_HEIGHT;
 
           int urloffset = rect.left + BUTTON_WIDTH * 4;
+#endif // SHOW_TOOLBAR_UI
 
           HDWP hdwp = BeginDeferWindowPos(1);
+#ifdef SHOW_TOOLBAR_UI
           hdwp = DeferWindowPos(hdwp, editWnd, NULL, urloffset,
             0, rect.right - urloffset, URLBAR_HEIGHT, SWP_NOZORDER);
+#endif // SHOW_TOOLBAR_UI
           hdwp = DeferWindowPos(hdwp, hwnd, NULL,
             rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
             SWP_NOZORDER);
