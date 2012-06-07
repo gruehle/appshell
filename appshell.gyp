@@ -49,6 +49,9 @@
       ],
       'xcode_settings': {
         'INFOPLIST_FILE': 'appshell/mac/Info.plist',
+        # Necessary to avoid an "install_name_tool: changing install names or
+        # rpaths can't be redone" error.
+        'OTHER_LDFLAGS': ['-Wl,-headerpad_max_install_names'],            'SYMROOT': 'xcodebuild',
         # Target build path.
         'SYMROOT': 'xcodebuild',
       },
@@ -223,6 +226,9 @@
           ],
           'xcode_settings': {
             'INFOPLIST_FILE': 'appshell/mac/helper-Info.plist',
+            # Necessary to avoid an "install_name_tool: changing install names or
+            # rpaths can't be redone" error.
+            'OTHER_LDFLAGS': ['-Wl,-headerpad_max_install_names'],            'SYMROOT': 'xcodebuild',
           },
           'postbuilds': [
             {
