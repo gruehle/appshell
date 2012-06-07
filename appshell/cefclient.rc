@@ -51,7 +51,7 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "&About ...",                  IDM_ABOUT
+        MENUITEM "&About",                      IDM_ABOUT
     END
 END
 
