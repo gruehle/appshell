@@ -13,4 +13,12 @@
 # Add project build scripts
 !make_appshell_project.sh
 
+# Add project files
+!appshell.xcodeproj
+!appshell.xcodeproj/*
+!appshell.xcodeproj/project.pbxproj
+
+# Add README
+!README.md
+
 # That's all!
