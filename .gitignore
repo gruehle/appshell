@@ -16,7 +16,6 @@
 
 # Add project files
 !appshell.xcodeproj
-!appshell.xcodeproj/*
 !appshell.xcodeproj/project.pbxproj
 !appshell.sln
 !Brackets.vcxproj
