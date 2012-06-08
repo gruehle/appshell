@@ -57,6 +57,13 @@
       },
       'conditions': [
         ['OS=="win"', {
+          'configurations': {
+            'Common_Base': {
+              'msvs_configuration_attributes': {
+                'OutputDirectory': '$(ConfigurationName)',
+              },
+            },
+          },
           'msvs_settings': {
             'VCLinkerTool': {
               # Set /SUBSYSTEM:WINDOWS.
@@ -170,6 +177,13 @@
       'defines': [
         'USING_CEF_SHARED',
       ],
+      'configurations': {
+        'Common_Base': {
+          'msvs_configuration_attributes': {
+            'OutputDirectory': '$(ConfigurationName)',
+          },
+        },
+      },
       'include_dirs': [
         '.',
       ],
